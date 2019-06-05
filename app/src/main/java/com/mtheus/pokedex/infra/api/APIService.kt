@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class APIService {
 
-    val BASE_URL = "https://pokeapi.co/api/v2/"
+    val BASE_URL = "https://pokeapi.co/"
 
     private lateinit var retrofit: Retrofit
 

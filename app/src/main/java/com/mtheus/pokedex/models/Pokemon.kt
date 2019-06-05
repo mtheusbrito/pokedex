@@ -14,7 +14,7 @@ class Pokemon {
     var forms: List<Form>? = null
 
     @SerializedName("game_indices")
-    var game_indices: GameIndice? = null
+    var game_indices: List<GameIndice>? = null
 
     @SerializedName("height")
     var height: Int? = null

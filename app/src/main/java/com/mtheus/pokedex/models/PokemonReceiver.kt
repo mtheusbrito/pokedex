@@ -18,5 +18,10 @@ class PokemonReceiver {
     var results: List<Result>? = null
 
 
+    override fun toString(): String {
+        return next.toString()
+    }
+
+
 
 }
