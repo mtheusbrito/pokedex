@@ -15,7 +15,7 @@ class PokemonReceiver {
     var previous: Any? = null
 
     @SerializedName("results")
-    var results: List<Result>? = null
+    var results: MutableList<Result>? = null
 
 
     override fun toString(): String {

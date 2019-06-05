@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface PokemonReceiverEndPoint {
 
 
-    @GET("api/v2/pokemon/")
+    @GET("api/v2/pokemon/?offset=0&limit=964")
     fun getPokemons(): Call<PokemonReceiver>
 
     @GET("api/v2/pokemon/{name}")

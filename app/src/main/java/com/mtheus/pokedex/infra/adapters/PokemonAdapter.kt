@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.mtheus.pokedex.R
 import com.mtheus.pokedex.infra.api.APIService
 import com.mtheus.pokedex.models.Pokemon
@@ -22,22 +24,33 @@ import java.lang.Exception
 class PokemonAdapter(
     private val context: Activity,
     private val activity: AppCompatActivity,
-    private var results: List<Result>,
     private var apiService: APIService
 ) :
     RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
 
+    private lateinit var results: MutableList<Result>
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.pokemon_row, parent, false)
-        return ViewHolder(view)
+
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.pokemon_row, parent, false))
+
+
     }
 
     override fun getItemCount(): Int {
         return results.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun getItemViewType(position: Int): Int {
+        return if (results[position].name!!.isNotEmpty()) {
+            position
 
+        } else {
+            -1
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val result: Result = results[position]
         holder.bindView(result)
 
@@ -64,6 +77,13 @@ class PokemonAdapter(
         }
     }
 
+    fun update(resultsUp: MutableList<Result>) {
+        results = resultsUp
+        notifyDataSetChanged()
+
+
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val texViewName = itemView.pokemon_name
@@ -76,8 +96,9 @@ class PokemonAdapter(
         }
 
         fun setSprite(sprite: String, context: Activity) {
-
-            Glide.with(context).load(sprite).into(imageViewPokemon)
+            Glide.with(context).load(sprite).apply(RequestOptions.circleCropTransform()).diskCacheStrategy(
+                DiskCacheStrategy.ALL
+            ).into(imageViewPokemon)
 
         }
 
