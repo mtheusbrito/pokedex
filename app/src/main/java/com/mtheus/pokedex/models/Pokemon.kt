@@ -33,6 +33,10 @@ class Pokemon {
     @SerializedName("moves")
     var moves: List<Move>? = null
 
+
+    @SerializedName("name")
+    var name: String? = null
+
     @SerializedName("order")
     var order: Int? = null
 

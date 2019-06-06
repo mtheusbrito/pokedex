@@ -4,13 +4,11 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.*
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import com.mtheus.pokedex.MainActivity
 import com.mtheus.pokedex.R
 import com.mtheus.pokedex.infra.adapters.PokemonAdapter
 import com.mtheus.pokedex.infra.api.APIService
@@ -23,7 +21,12 @@ import retrofit2.Response
 
 class PokemonsFragment : Fragment(), SearchView.OnQueryTextListener {
 
-    var results: MutableList<Result>? = mutableListOf()
+    private var results: MutableList<Result>? = mutableListOf()
+    private lateinit var mView: View
+    private var apiService: APIService = APIService()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var pokemonAdapter: PokemonAdapter
+    private lateinit var toolbar: Toolbar
 
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -38,20 +41,14 @@ class PokemonsFragment : Fragment(), SearchView.OnQueryTextListener {
         results?.forEach {
             if (it.name!!.toLowerCase().contains(textInput)) {
 
-                newResults!!.add(it)
+                newResults.add(it)
             }
         }
 
-        pokemonAdapter.update(newResults!!)
+        pokemonAdapter.update(newResults)
 
         return true
     }
-
-    private lateinit var mView: View
-    private lateinit var apiService: APIService
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var pokemonAdapter: PokemonAdapter
-    private lateinit var toolbar: Toolbar
 
 
     override fun onCreateView(
@@ -68,7 +65,6 @@ class PokemonsFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun initComponents(mView: View) {
-        apiService = APIService()
         recyclerView = mView.findViewById(R.id.recyclerView)
         toolbar = mView.findViewById(R.id.toolbar) as Toolbar
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
@@ -78,8 +74,7 @@ class PokemonsFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun getPokemons() {
-        val call = apiService.pokemonReceiverEndPoint.getPokemons()
-        call.enqueue(object : Callback<PokemonReceiver> {
+        apiService.pokemonReceiverEndPoint.getPokemons().enqueue(object : Callback<PokemonReceiver> {
             override fun onFailure(call: Call<PokemonReceiver>, t: Throwable) {
                 Toast.makeText(activity, "Falha na conexão" + t.message, Toast.LENGTH_LONG).show()
             }
@@ -99,13 +94,15 @@ class PokemonsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun showListPokemons(results: MutableList<Result>) {
 
-        pokemonAdapter = PokemonAdapter(context as Activity, activity as AppCompatActivity, apiService)
+        pokemonAdapter = PokemonAdapter(activity as AppCompatActivity, apiService)
         pokemonAdapter.update(results)
 
         recyclerView.adapter = pokemonAdapter
         val linearLayoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         linearLayoutManager.scrollToPosition(0)
         recyclerView.layoutManager = linearLayoutManager
+        recyclerView.isVerticalScrollBarEnabled
+        recyclerView.addItemDecoration(DividerItemDecoration(this.activity, DividerItemDecoration.VERTICAL))
 
         recyclerView.setHasFixedSize(true)
     }

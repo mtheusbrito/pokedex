@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".app.PokemonDetailFragment">
+
+    <include layout="@layout/toolbar_layout"/>
+    <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+        <ImageView android:layout_width="150dp"
+                   android:id="@+id/pokemon_image"
+                   android:scaleType="fitXY"
+                   android:layout_gravity="center_horizontal"
+                   android:layout_height="150dp"/>
+        <TextView android:layout_width="match_parent"
+                  android:textAlignment="center"
+                  android:layout_height="wrap_content"
+                  android:textSize="22sp"
+                  android:textStyle="bold"
+                  android:layout_marginTop="10dp"
+                  android:id="@+id/pokemon_name"
+        />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:text="Abilidades:"
+                  android:textStyle="bold|italic"
+                  android:textSize="19sp"/>
+        <TextView
+                android:textSize="18sp"
+                android:id="@+id/abilities"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:text="Experiência:"
+                  android:layout_marginTop="8dp"
+                  android:textStyle="bold|italic"
+                  android:textSize="19sp"/>
+        <TextView
+                android:id="@+id/pokemon_base_experience"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:text="Altura:"
+                  android:layout_marginTop="8dp"
+                  android:textStyle="bold|italic"
+                  android:textSize="19sp"/>
+        <TextView
+                android:id="@+id/pokemon_height"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+</LinearLayout>

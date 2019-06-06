@@ -1,6 +1,7 @@
 package com.mtheus.pokedex.infra.adapters
 
 import android.app.Activity
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -10,7 +11,9 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.mtheus.pokedex.MainActivity
 import com.mtheus.pokedex.R
+import com.mtheus.pokedex.app.PokemonDetailFragment
 import com.mtheus.pokedex.infra.api.APIService
 import com.mtheus.pokedex.models.Pokemon
 import com.mtheus.pokedex.models.Result
@@ -22,7 +25,7 @@ import java.lang.Exception
 
 
 class PokemonAdapter(
-    private val context: Activity,
+
     private val activity: AppCompatActivity,
     private var apiService: APIService
 ) :
@@ -32,7 +35,7 @@ class PokemonAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.pokemon_row, parent, false))
+        return ViewHolder(LayoutInflater.from(activity).inflate(R.layout.pokemon_row, parent, false))
 
 
     }
@@ -64,7 +67,7 @@ class PokemonAdapter(
 
                 override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                     if (response.isSuccessful) {
-                        holder.setSprite(response.body()!!.sprites?.front_default.toString(), context)
+                        holder.setSprite(response.body()!!.sprites?.front_default.toString(), activity)
                         Log.v("Sprite", response.body()!!.sprites?.front_default.toString())
                     } else {
                         Log.v("Error sprite", "response is not success")
@@ -72,6 +75,16 @@ class PokemonAdapter(
                 }
 
             })
+
+
+            holder.itemView.setOnClickListener {
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, PokemonDetailFragment().newInstance(result.name!!))
+                    .addToBackStack(null)
+                    .commit()
+
+
+            }
         } catch (e: Exception) {
             Log.v("error sprite", e.message)
         }
@@ -92,11 +105,11 @@ class PokemonAdapter(
 
         fun bindView(result: Result) {
 
-            texViewName.text = result.name?.capitalize() ?: null
+            texViewName.text = result.name?.capitalize()
         }
 
-        fun setSprite(sprite: String, context: Activity) {
-            Glide.with(context).load(sprite).apply(RequestOptions.circleCropTransform()).diskCacheStrategy(
+        fun setSprite(sprite: String, activity: AppCompatActivity) {
+            Glide.with(activity).load(sprite).apply(RequestOptions.circleCropTransform()).diskCacheStrategy(
                 DiskCacheStrategy.ALL
             ).into(imageViewPokemon)
 
